@@ -71,3 +71,92 @@ while True:
         print("输入无效，请输入一个整数。")
 print(f"你的年龄是：{age}")
 
+#示例：简单的计算器
+try:
+    num1=float(input("请输入第一个数字："))
+    num2=float(input("请输入第二个数字："))
+    result=num1+num2
+    print(f"{num1}+{num2}={result}")
+except ValueError:
+    print("输入无效，请输入数字。")
+
+#如果需要将数字和字符串一起输出，可以使用 str() 转换，或使用 f-string 自动处理。
+age=18
+print("年龄："+str(age)) #使用 str() 转换整数为字符串
+print(f"年龄:{age}") #使用 f-string 自动将 age 转换为字符串并插入输出
+#安全性：从用户获取输入时，永远不要假设输入是合法的。始终进行验证和异常处理。
+
+
+#字符串拼接
+#1.使用+运算符
+first_name="张"
+last_name="三"
+full_name=first_name+last_name #字符串连接 输出张三
+print(full_name)
+#2.使用join()方法
+#当需要拼接多个字符串（如列表中的元素）时，join() 更高效、更灵活。
+words=["Python","是","一门","语言"]
+sentence="".join(words) #使用空字符串作为分隔符连接列表中的字符串 输出Python是一门语言
+print(sentence)     #输出：Python 是一门语言
+#也可以指定其他分隔符
+path="/".join(["home","user","docs"]) #使用斜杠作为分隔符连接列表中的字符串 输出home/user/docs
+print(path)       #输出：home/user/docs
+#3.使用 f-string 或 format() 进行格式化拼接
+name="小明"
+age=18
+info=f"姓名：{name},年龄：{age}"
+print(info) #输出姓名：小明,年龄：18
+
+#字符串切片
+#s[start:end:step]
+#1.基本切片
+s="Hello,Python!"
+print(s[0:5]) #输出Hello(索引0到4的字符)
+print(s[7:])    #输出Python!(索引7到末尾的字符)
+print(s[:5])   #输出Hello(从开头到索引4的字符)
+print(s[7:13]) #输出Python(索引7到12的字符)(13是结束索引，不包含在结果中)
+#2.负索引
+print(s[-7:-1]) #输出Python(从倒数第7个字符到倒数第2个字符)
+print(s[-7:])  #输出Python!(从倒数第7个字符到末尾)
+#3.步长切片
+print(s[::2]) #输出HloPto!(从开头到末尾，每隔一个字符取一个)
+print(s[::-1]) #输出!nohtyP,olleH(字符串反转)
+#切片不会修改原字符串，而是返回一个新的字符串。原字符串s仍然保持不变。
+
+#字符串替换
+#1.使用 replace() 方法
+#replace(old,new,count)
+text="apple apple apple"
+new_text=text.replace("apple","orange")
+print(new_text) #输出orange orange orange
+#限制替换次数
+new_text2=text.replace("apple","orange",2)
+print(new_text2) #输出orange orange apple(只替换前两个apple)
+
+#大小写转换
+s="Python Programming"
+print(s.upper()) #输出PYTHON PROGRAMMING(转换为大写)
+print(s.lower()) #输出python programming(转换为小写)
+print(s.capitalize()) #输出Python programming(首字母大写)
+print(s.title()) #输出Python Programming(每个单词首字母大写)
+print(s.swapcase()) #输出pYTHON pROGRAMMING(大小写互换)
+#比较字符串时，通常先将两者转为统一大小写，实现不区分大小写的比较：
+user_input=input("请输入yes或no：")
+if user_input.lower()=="yes":
+    print("你选择了是")
+
+text="  Hello,Python!  "
+print(text.strip()) #输出Hello,Python!(去除两端的空白)
+print(text.split(",")) #输出['  Hello', 'Python!  '](以逗号分割字符串)
+print(text.find("Python")) #输出8(查找子字符串的位置，返回索引)
+
+#f-string格式化
+name="Alice"
+age=18
+height=1.75
+print(f"姓名:{name},年龄：{age},身高：{height:.2f}米") #输出姓名:Alice,年龄：18,身高：1.75米(身高保留两位小数)
+price=5
+count=3
+print(f"总价：{price*count}元") #输出总价：15元(直接在f-string中进行计算)
+print(f"大写：{name.upper()}") #输出大写：ALICE(在f-string中调用方法)
+print(f"{10+20}") #输出30(在f-string中直接计算表达式)
