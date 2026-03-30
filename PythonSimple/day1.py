@@ -11,7 +11,7 @@ age=18#整数
 height=1.75#浮点数
 is_student=True#布尔值
 x,y,z=1,2,3#多变量赋值
-a=b=c=10#都赋值位10
+a=b=c=10#都赋值为10
 data=100#整数类型
 data="文本"#现在变为字符串
 a=42
@@ -65,5 +65,5 @@ num_str=input("请输入一个数字：")
 try:
     num=float(num_str) #尝试将输入转换为浮点数
     print("转化成功",num)
-except ValueError:
+except ValueError:  
     print("输入不是有效的数字")
