@@ -129,5 +129,27 @@ int main(void)
     printf("4. 指针必须初始化后再使用，否则是野指针。\n");
     printf("5. 指针算术移动的字节数取决于它指向的类型。\n");
 
+    //一个普通变量
+    int a3 = 10;
+    printf("a3的值:%d\n", a3);
+    printf("a3的地址:%p\n", (void *)&a3);
+    //定义一个指针变量p3,用来存储地址
+    int *p3; //这里*p3是指针
+    p3 = &a3; //把a3的地址存到p3中
+    //通过指针访问a3的值（解引用）
+    printf("p3中存着的地址:%p\n", (void *)&p3);
+    printf("通过p3获取a3的值:%d\n", *p3); //这里的*是"取内容"
+    //通过指针修改变量的值
+    *p3 = 20; //相当于修改a3=20
+    printf("修改*p3后，a3的值变为:%d\n", a3);
+    int a4 = 10;
+    printf("a4的值:%d\n", a4);
+    printf("a4的地址:%p\n", (void *)&a4);
+    int *p4;
+    p4 = &a4;
+    printf("p4中存着的地址:%p\n", (void *)p4);
+    printf("通过p4获取a4的值:%d\n", *p4);
+    *p4 = 20;
+    printf("修改*p4后，a的值变为:%d\n", a4);
     return 0;
 }

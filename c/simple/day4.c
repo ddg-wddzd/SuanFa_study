@@ -289,7 +289,7 @@ void demo_1d_array(void)
         for (int j = 0; j < n - 1 - i; j++)
         {
             if (sort_arr[j] > sort_arr[j + 1])
-            {
+            { // 交换的经典三步
                 int temp = sort_arr[j];
                 sort_arr[j] = sort_arr[j + 1];
                 sort_arr[j + 1] = temp;
