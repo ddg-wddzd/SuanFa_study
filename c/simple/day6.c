@@ -9,6 +9,8 @@
  */
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 // ========== 1. 传值 vs 传址 ==========
 void swap_by_value(int a, int b)
@@ -150,18 +152,144 @@ void demo_function_pointer_array(void)
 // ========== 1. 二级指针的基本概念 ==========
 void demo_basic(void)
 {
+    printf("========== 1. 二级指针的定义与初始化 ==========\n");
+
     int a = 10;
-    int *p = &a;   // 一级指针，指向变量a
-    int **pp = &p; // 二级指针，指向指针p
-    printf("a的值：%d\n", a);
-    printf("a的地址：%p\n", (void *)&a);
-    printf("p中存的地址:%p\n", (void *)p);
-    printf("p自己的地址:%p\n", (void *)&p);
-    printf("pp中存的地址:%p(即&p)\n", (void *)pp);
-    printf("通过pp两次解引用得到a的值:%d\n\n", **pp);
+    int *p = &a;   // 一级指针，指向变量 a
+    int **pp = &p; // 二级指针，指向指针 p
+
+    printf("a 的值: %d\n", a);
+    printf("a 的地址: %p\n", (void *)&a);
+    printf("p 中存的地址: %p (即 &a)\n", (void *)p);
+    printf("p 自己的地址: %p\n", (void *)&p);
+    printf("pp 中存的地址: %p (即 &p)\n", (void *)pp);
+    printf("通过 pp 两次解引用得到 a 的值: %d\n\n", **pp);
     // 本质：二级指针就是“存放一级指针地址”的变量
 }
+
 // ========== 2. 通过二级指针修改一级指针的指向 ==========
+void demo_modify_pointer(void)
+{
+    printf("========== 2. 通过二级指针修改一级指针的指向 ==========\n");
+
+    int x = 10, y = 20;
+    int *ptr = &x; // ptr 指向 x
+    printf("初始: ptr 指向 %d (值=%d)\n", *ptr, *ptr);
+
+    int **pptr = &ptr; // pptr 指向 ptr
+
+    // 通过 pptr 修改 ptr 的指向，让它指向 y
+    *pptr = &y; // 等价于 ptr = &y
+    printf("修改后: ptr 指向 %d (值=%d)\n", *ptr, *ptr);
+
+    // 也可以通过 *pptr 修改原变量的值
+    **pptr = 99; // 等价于 *ptr = 99，即修改 y = 99
+    printf("通过 **pptr 修改 y 的值: y = %d\n", y);
+    printf("\n");
+}
+
+// ========== 3. 场景1：函数内修改一级指针的指向 ==========
+void allocate_memory(int **pp, int size)
+{
+    // 在函数内为一级指针分配内存，并让它指向新内存
+    *pp = (int *)malloc(size * sizeof(int));
+    if (*pp != NULL)
+    {
+        (*pp)[0] = 100;
+    }
+}
+
+void demo_modify_pointer_in_function(void)
+{
+    printf("========== 3. 场景1：函数内修改一级指针的指向 ==========\n");
+    int *arr = NULL; // 一级指针初始为空
+
+    // 调用函数，传入二级指针，让函数修改 arr 的指向
+    allocate_memory(&arr, 5);
+    if (arr != NULL)
+    {
+        printf("arr 指向了动态内存，第一个元素: %d\n", arr[0]);
+        free(arr); // 释放内存
+    }
+    printf("\n");
+    // 说明：如果只传一级指针，函数内修改的只是形参的副本，外部指针不会改变
+}
+
+// ========== 4. 场景2：处理指针数组（字符串数组） ==========
+void demo_string_array(void)
+{
+    printf("========== 4. 场景2：处理指针数组（字符串数组） ==========\n");
+
+    // 指针数组：每个元素是一个字符指针（指向字符串）
+    const char *strs[] = {"Hello", "World", "C", "Pointer"};
+    int count = sizeof(strs) / sizeof(strs[0]);
+
+    // 定义一个二级指针，指向指针数组的第一个元素
+    const char **p = strs; // 等价于 &strs[0]
+
+    printf("通过二级指针遍历字符串数组:\n");
+    for (int i = 0; i < count; i++)
+    {
+        printf("strs[%d] = %s\n", i, *(p + i)); // 或者 p[i]
+    }
+
+    // 二级指针常用于函数参数，接收指针数组
+    // 例如：void print_strings(const char **arr, int n);
+    printf("\n");
+}
+
+// 辅助函数：接收二级指针作为参数，处理指针数组
+void print_strings(const char **arr, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        printf("%s ", arr[i]);
+    }
+    printf("\n");
+}
+
+void demo_pointer_array_in_function(void)
+{
+    printf("二级指针作为函数参数，处理指针数组:\n");
+    const char *fruits[] = {"Apple", "Banana", "Cherry"};
+    int n = sizeof(fruits) / sizeof(fruits[0]);
+    print_strings(fruits, n); // 数组名退化为指向首元素的指针（二级指针）
+}
+void task3_sort_strings(void)
+{
+    printf("========== 任务3：二级指针实现字符串排序 ==========\n");
+
+    // 待排序的字符串数组
+    char *fruits[] = {"Banana", "Apple", "Cherry", "Date", "Blueberry"};
+    int n = sizeof(fruits) / sizeof(fruits[0]);
+
+    printf("排序前：");
+    for (int i = 0; i < n; i++)
+    {
+        printf("%s ", fruits[i]);
+    }
+    printf("\n");
+
+    // ==================== 任务3：用二级指针实现字符串排序 ====================
+    // 比较函数（用于 qsort）
+    int compare_strings(const void *a, const void *b)
+    {
+        // a 和 b 是指向指针的指针（二级指针），因为数组元素是 char*
+        const char *str1 = *(const char **)a;
+        const char *str2 = *(const char **)b;
+        return strcmp(str1, str2);
+    }
+    // 使用标准库 qsort，传入数组名（二级指针），元素个数，元素大小，比较函数
+    qsort(fruits, n, sizeof(char *), compare_strings);
+
+    printf("排序后：");
+    for (int i = 0; i < n; i++)
+    {
+        printf("%s ", fruits[i]);
+    }
+    printf("\n");
+    // 注意：这里只交换了指针，并没有移动字符串本身，效率高
+}
 
 int main(void)
 {
@@ -251,6 +379,24 @@ int main(void)
     demo_pointer_as_parameter();
     demo_function_pointer();
     demo_function_pointer_array();
-
+    demo_basic();
+    demo_modify_pointer();
+    demo_modify_pointer_in_function();
+    demo_string_array();
+    demo_pointer_array_in_function();
+    task3_sort_strings();
     return 0;
 }
+
+// 安全的写法：
+// printf("ptr指向: %s\n", ptr ? ptr : "(null)");
+// 相当于：
+/*if (ptr != NULL)
+{
+    ptr
+}
+else
+{
+    "(null)"
+}
+*/
