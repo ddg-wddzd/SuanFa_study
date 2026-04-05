@@ -65,5 +65,16 @@ int main(){
     int x = 10;
     printf("main:x=%d,&x=%p\n", x, (void *)&x);
     func1(x);
+    int a=10;
+    printf("a=%d,地址：%p\n", a, &a);
+    //指针变量：存放地址
+    int *p;//定义指针
+    p = &a;//初始化：p指向a
+    printf("p指向的地址：%p,值：%d\n", p,* p); //解引用：通过指针访问a
+    *p = 99;
+    printf("修改后a=%d\n", a);
+    int *q = NULL;//空指针，不能解引用
+    printf("空指针地址：%p\n", q);
+
     return 0;
 }
